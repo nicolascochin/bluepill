@@ -11,7 +11,7 @@ fi
 
 clear
 BLUEPILL_REPO="${BLUEPILL_REPO:-nicolascochin/bluepill}"
-BLUEPILL_LOCAL="${BLUEPILL_LOCAL:~/.local/share/bluepill}"
+BLUEPILL_LOCAL="${BLUEPILL_LOCAL:-~/.local/share/bluepill}"
 
 echo -e "\nCloning Bluepill from: https://github.com/${BLUEPILL_REPO}.git"
 rm -rf ${BLUEPILL_LOCAL}/
