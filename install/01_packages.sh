@@ -24,7 +24,7 @@ done
 
 if [ ${#MISSING_PACKAGES[@]} -ne 0 ]; then
   echo "Install packages: ${MISSING_PACKAGES[@]}"
-  rpm-ostree install -y "${MISSING_PACKAGES[@]}" && reboot
+  rpm-ostree install -y "${MISSING_PACKAGES[@]}" >/dev/null 
 else
   echo "All packages are already installed."
 fi
