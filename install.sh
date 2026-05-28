@@ -4,6 +4,8 @@ set -e
 # Give people a chance to retry running the installation
 trap 'echo "BluePill installation failed! You can retry by running: source ${BLUEPILL_LOCAL}/install.sh"' ERR
 
+BLUEPILL_LOCAL="${BLUEPILL_LOCAL:-~/.local/share/bluepill}"
+
 # Install everything
 for f in ${BLUEPILL_LOCAL}/install/*.sh; do
   echo -e "\nRunning installer: $f"
