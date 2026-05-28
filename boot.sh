@@ -11,11 +11,10 @@ fi
 
 clear
 BLUEPILL_REPO="${BLUEPILL_REPO:-nicolascochin/bluepill}"
-BLUEPILL_LOCAL="${BLUEPILL_LOCAL:-~/.local/share/bluepill}"
 
 echo -e "\nCloning Bluepill from: https://github.com/${BLUEPILL_REPO}.git"
-rm -rf ${BLUEPILL_LOCAL}/
-git clone -q "https://github.com/${BLUEPILL_REPO}.git" ${BLUEPILL_LOCAL}
+rm -rf ${HOME}/.local/share/bluepill}/
+git clone -q "https://github.com/${BLUEPILL_REPO}.git" ${HOME}/.local/share/bluepill}
 
 echo -e "\nInstallation starting..."
-source ${BLUEPILL_LOCAL}/install.sh
+source ${HOME}/.local/share/bluepill}/install.sh
