@@ -13,5 +13,5 @@ else
   print_status ko
   print_msg "Enabling flathub"
   flatpak remote-modify --no-filter --enable flathub
-  check_flathub && print_status ok || print_status ko
+  check_flathub && print_status ok || (print_status ko && exit 1)
 fi
