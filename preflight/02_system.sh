@@ -7,14 +7,17 @@ else
     rpm_exit=$?
 fi
 
-if [ $rpm_exit -ne 0 ]; then
+case $rpm_exit in
+  0)
     print_status ko
-    echo "System is currently upgrading. Retry later"
+    echo "An update is available. Please update and retry"
     exit 1
-elif echo "$rpm_output" | grep -q "AvailableUpdate"; then
-    print_status ko
-    echo "Updating the system"
-    exit 1
-else
+    ;;
+  77)
     print_status ok
-fi
+    ;;
+  *)
+    print_status ko
+    echo "System is busy (e.g. upgrade in progress), retry later"
+    ;;
+esac
