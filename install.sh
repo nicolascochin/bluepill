@@ -1,13 +1,15 @@
-# Exit immediately if a command exits with a non-zero status
-set -e
+#!/bin/bash
 
-# Give people a chance to retry running the installation
-trap 'echo "BluePill installation failed! You can retry by running: source ${BLUEPILL_LOCAL}/install.sh"' ERR
+# Exit immediately if a command exits with a non-zero status
+set -Eeuo pipefail
 
 BLUEPILL_LOCAL="${BLUEPILL_LOCAL:-${HOME}/.local/share/bluepill}"
+INSTALL_DIR=${BLUEPILL_LOCAL}/install
 
-# Install everything
-for f in ${BLUEPILL_LOCAL}/install/*.sh; do
-  echo -e "\nRunning installer: $f"
+# Helpers
+for f in ${BLUEPILL_LOCAL}/helpers/*.sh; do
   source "$f"
 done
+
+run_installers "preflight"
+run_installers "packages"
