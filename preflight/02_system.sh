@@ -19,5 +19,6 @@ case $rpm_exit in
   *)
     print_status ko
     echo "System is busy (e.g. upgrade in progress), retry later"
+    exit 1
     ;;
 esac
