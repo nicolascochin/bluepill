@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 print_msg() {
-  printf "%s" "${1:?Usage: print_msg <message>}"
+  printf "%s...  " "${1:?Usage: print_msg <message>}"
 }
 
 print_status() {
