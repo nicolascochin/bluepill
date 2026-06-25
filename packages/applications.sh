@@ -3,7 +3,7 @@
 flatpak_install() {
   local KEY="$1"
 
-  flatpak install flathub -y --noninteractive "$KEY" >/dev/null \
+  flatpak install flathub -y --noninteractive "$KEY" >/dev/null  2&>1 \
     && print_status ok \
     || print_status ko
 }
