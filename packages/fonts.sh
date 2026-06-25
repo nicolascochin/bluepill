@@ -1,5 +1,7 @@
 #!/bin/bash
 
+FONT_DIR=${HOME}/.local/share/fonts
+
 declare -A FONTS=(
   ["FiraCode"]="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
   ["Meslo"]="https://github.com/romkatv/powerlevel10k-media/releases/download/v2.3.3/meslo-lgs-nf.tar.gz"
