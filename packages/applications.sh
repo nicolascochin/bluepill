@@ -36,6 +36,6 @@ done
 for KEY in $(flatpak list --app --columns=application,origin | awk '$2=="fedora"{print $1}')
 do
   print_msg "Re-installing $KEY from flathub"
-  flatpak uninstall -y $KEY && flatpak_install $KEY
+  flatpak uninstall -y --noninteractive $KEY > /dev/null && flatpak_install $KEY
 done
 
