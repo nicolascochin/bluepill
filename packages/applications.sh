@@ -21,6 +21,7 @@ declare -A APPS=(
   ["com.discordapp.Discord"]="Discord"
   ["io.github.CyberTimon.RapidRAW"]="Rapid RAW"
   ["com.visualstudio.code"]="Visual Studio Code"
+  ["org.gnome.design.IconLibrary"]="Icones"
 )
 for KEY in "${!APPS[@]}"; do 
   NAME="${APPS[$KEY]}"
