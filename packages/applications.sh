@@ -16,8 +16,9 @@ for KEY in "${!APPS[@]}"; do
   then 
     print_status ok
   else 
-    print_status ko 
+    flatpak install -y $KEY) \
+      && print_status ok \
+      || print_status ko
   fi
-  # ! flatpak list | grep -q $KEY && (echo "Install $NAME" && flatpak install -y $KEY) || echo "$NAME already installed"
 done
 
