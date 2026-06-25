@@ -16,7 +16,7 @@ for KEY in "${!APPS[@]}"; do
   then 
     print_status ok
   else 
-    flatpak install -y $KEY) \
+    flatpak install -y $KEY \
       && print_status ok \
       || print_status ko
   fi
