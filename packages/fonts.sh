@@ -31,8 +31,3 @@ done
 
 print_msg "🔄 Refreshing font cache"
 fc-cache -fv >/dev/null && print_status ok || print_status ko
-
-
-curl -LO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/NerdFontsSymbolsOnly.zip
-unzip NerdFontsSymbolsOnly.zip -d ~/.local/share/fonts
-fc-cache -fv
