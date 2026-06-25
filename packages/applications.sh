@@ -11,7 +11,7 @@ declare -A APPS=(
 )
 for KEY in "${!APPS[@]}"; do 
   NAME="${APPS[$KEY]}"
-  print_msg "Installing ${NAME}..."
+  print_msg "Installing ${NAME}"
   if flatpak info ${KEY} > /dev/null 2&>1 
   then 
     print_status ok
