@@ -1,5 +1,4 @@
 #!/bin/bash
-print_msg "Installing applications"
 
 declare -A APPS=(
   ["com.protonvpn.www"]="Proton VPN"
