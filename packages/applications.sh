@@ -1,5 +1,13 @@
 #!/bin/bash
 
+flatpak_install() {
+  local KEY="$1"
+
+  flatpak install -y --noninteractive "$KEY" >/dev/null \
+    && print_status ok \
+    || print_status ko
+}
+
 declare -A APPS=(
   ["com.protonvpn.www"]="Proton VPN"
   ["me.proton.Pass"]="Proton Pass"
@@ -21,15 +29,13 @@ for KEY in "${!APPS[@]}"; do
   then 
     print_status ok
   else 
-    flatpak install -y --noninteractive $KEY >/dev/null \
-      && print_status ok \
-      || print_status ko
+    flatpak_install $KEY
   fi
 done
 
 for KEY in $(flatpak list --app --columns=application,origin | awk '$2=="fedora"{print $1}')
 do
   print_msg "Re-installing $KEY from flathub"
-  print_status ok
+  flatpak uninstall -y $KEY && flatpak_install $KEY
 done
 
