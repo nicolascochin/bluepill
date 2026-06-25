@@ -1,5 +1,5 @@
 #!/bin/bash
-print_msg "Checking if a system update is up to date"
+print_msg "🔍 Checking if a system update is up to date"
 
 if rpm_output=$(rpm-ostree upgrade --check 2>/dev/null); then
     rpm_exit=0
