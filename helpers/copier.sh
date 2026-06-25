@@ -6,7 +6,7 @@ copy_files() {
 
   for f in "${BLUEPILL_LOCAL}/${src_folder}"/*; do
     [[ -f "$f" ]] || continue
-    print_msg "📥 Copying $f into ${dest_folder}"
+    print_msg "📥 Copying $f into ${dest_folder}/"
     cp $f ${dest_folder} && print_status ok || print_status ko
   done
 }
