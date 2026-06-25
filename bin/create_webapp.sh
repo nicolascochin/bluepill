@@ -4,7 +4,7 @@ set -euo pipefail
 
 APP_NAME="$1"
 APP_URL="$2"
-APP_ICON="$3"
+#APP_ICON="$3"
 
 APP_DIR=${HOME}/.local/share/applications
 DESKTOP_ID="$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
