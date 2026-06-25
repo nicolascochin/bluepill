@@ -12,4 +12,5 @@ for f in ${BLUEPILL_LOCAL}/helpers/*.sh; do
 done
 
 run_installers "preflight"
+copy_files "bin" $HOME/.local/bin
 run_installers "packages"
