@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source /etc/os-release
-print_msg "Checking system is a silverblue"
+print_msg "🔍 Checking system is a silverblue"
 
 if [[ "${ID:-}" != "fedora" || "${VARIANT_ID:-}" != "silverblue" ]]; then
   print_status ko
