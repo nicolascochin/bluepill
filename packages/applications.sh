@@ -3,7 +3,7 @@
 flatpak_install() {
   local KEY="$1"
 
-  flatpak install flathub -y --noninteractive "$KEY" >/dev/null  2&>1 \
+  flatpak install flathub -y --noninteractive "$KEY" >/dev/null  2>&1 \
     && print_status ok \
     || print_status ko
 }
@@ -25,7 +25,7 @@ declare -A APPS=(
 for KEY in "${!APPS[@]}"; do 
   NAME="${APPS[$KEY]}"
   print_msg "📥 Installing ${NAME}"
-  if flatpak info ${KEY} > /dev/null 2&>1 
+  if flatpak info ${KEY} > /dev/null 2>&1 
   then 
     print_status ok
   else 
