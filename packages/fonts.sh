@@ -8,6 +8,8 @@ declare -A FONTS=(
 )
 FONT_DIR=${HOME}/.local/share/fonts
 
+mkdir -p $FONT_DIR
+
 for FONT_NAME in "${!FONTS[@]}"; do 
   FONT_URL="${FONTS[$FONT_NAME]}"
   print_msg "Installing font $FONT_NAME"
