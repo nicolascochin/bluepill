@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+source ~/.local/share/bluepill/helpers/printers.sh
+
 if [[ $# -ne 3 ]]; then
     echo "Usage: $0 <nom> <url> <icone>"
     echo
