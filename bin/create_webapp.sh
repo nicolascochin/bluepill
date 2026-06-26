@@ -2,35 +2,33 @@
 
 set -euo pipefail
 
-if [[ $# -ne 2 ]]; then
-    echo "Usage: $0 <nom> <url>"
+if [[ $# -ne 3 ]]; then
+    echo "Usage: $0 <nom> <url> <icone>"
+    echo
+    echo "Exemple :"
+    echo "  $0 \"ChatGPT\" \"https://chatgpt.com\" chatgpt.png"
     exit 1
 fi
 
 APP_NAME="$1"
 APP_URL="$2"
+ICON_NAME="$3"
 
-DESKTOP_ID="$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
+APP_ID="$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
 
-ICON_DIR="$HOME/.local/share/icons/webapps"
-APP_DIR="$HOME/.local/share/applications"
+APPLICATIONS_DIR="$HOME/.local/share/applications"
+ICONS_DIR="$HOME/.local/share/bluepill/icons"
 
-mkdir -p "$ICON_DIR" "$APP_DIR"
+mkdir -p "$APPLICATIONS_DIR"
 
-ICON_PATH="${ICON_DIR}/${DESKTOP_ID}.png"
+ICON_PATH="${ICONS_DIR}/${ICON_NAME}"
 
-# Télécharge le favicon s'il n'existe pas déjà
 if [[ ! -f "$ICON_PATH" ]]; then
-    DOMAIN=$(echo "$APP_URL" | sed -E 's#https?://([^/]+)/?.*#\1#')
-
-    echo "Téléchargement de l'icône pour ${DOMAIN}..."
-
-    curl -fsSL \
-        "https://www.google.com/s2/favicons?domain=${DOMAIN}&sz=256" \
-        -o "$ICON_PATH"
+    echo "Erreur : l'icône '$ICON_PATH' est introuvable."
+    exit 1
 fi
 
-cat > "${APP_DIR}/${DESKTOP_ID}.desktop" <<EOF
+cat > "${APPLICATIONS_DIR}/${APP_ID}.desktop" <<EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -42,5 +40,4 @@ Categories=Network;
 StartupNotify=true
 EOF
 
-chmod +x "${APP_DIR}/${DESKTOP_ID}.desktop"
-
+chmod +x "${APPLICATIONS_DIR}/${APP_ID}.desktop"
