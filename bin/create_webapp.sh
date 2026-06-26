@@ -42,4 +42,7 @@ Categories=Network;
 StartupNotify=true
 EOF
 
-chmod +x "${APPLICATIONS_DIR}/${APP_ID}.desktop"
+print_msg "📥 Installing web_app $APP_NAME into $APPLICATIONS_DIR"
+chmod +x "${APPLICATIONS_DIR}/${APP_ID}.desktop" \
+  && print_status ok
+  || print_status ko
