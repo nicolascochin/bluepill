@@ -33,7 +33,7 @@ cat > "${APPLICATIONS_DIR}/${APP_ID}.desktop" <<EOF
 Version=1.0
 Type=Application
 Name=${APP_NAME}
-Exec=chromium --app=${APP_URL}
+Exec=xdg-open ${APP_URL}
 Icon=${ICON_PATH}
 Terminal=false
 Categories=Network;
