@@ -14,7 +14,6 @@ BASE_URL="https://extensions.gnome.org"
 INSTALL_DIR="$HOME/.local/share/gnome-shell/extensions"
 TMP_DIR="$(mktemp -d)"
 
-
 install_extension () {
   local uuid="$1"
 
