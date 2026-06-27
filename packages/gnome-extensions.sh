@@ -20,7 +20,7 @@ install_extension () {
   local zip_file="${TMP_DIR}/${uuid}.zip"
 
   # ⭐ LE BON ENDPOINT (le seul fiable)
-  local url="https://extensions.gnome.org/download-extension/${uuid}.shell-extension.zip?shell_version=99"
+  local url="https://extensions.gnome.org/download-extension/${uuid}.shell-extension.zip?shell_version=999999999"
 
   if ! curl -fsSL "$url" -o "$zip_file"; then
     print_status ko
