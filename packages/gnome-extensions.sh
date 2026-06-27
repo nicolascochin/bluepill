@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -9,8 +9,6 @@ EXTENSIONS=(
   "tilingshell@ferrarodomenico.com"
 )
 
-BASE_URL="https://extensions.gnome.org"
-
 INSTALL_DIR="$HOME/.local/share/gnome-shell/extensions"
 TMP_DIR="$(mktemp -d)"
 
@@ -20,11 +18,13 @@ install_extension () {
   print_msg "📦 Installing $uuid"
 
   local zip_file="${TMP_DIR}/${uuid}.zip"
-  local url="${BASE_URL}/extension-data/${uuid}.shell-extension.zip"
+
+  # ⭐ LE BON ENDPOINT (le seul fiable)
+  local url="https://extensions.gnome.org/download-extension/${uuid}.shell-extension.zip?shell_version=99"
 
   if ! curl -fsSL "$url" -o "$zip_file"; then
     print_status ko
-    echo "Download failed: $uuid"
+    echo "Failed: $uuid"
     return 1
   fi
 
