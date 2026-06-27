@@ -16,7 +16,9 @@ APP_NAME="$1"
 APP_URL="$2"
 ICON_NAME="$3"
 
-APP_ID="$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' ' ' '-')"
+APP_ID="$(echo "$APP_NAME" \
+    | tr '[:upper:]' '[:lower:]' \
+    | tr ' ' '-')"
 
 APPLICATIONS_DIR="$HOME/.local/share/applications"
 ICONS_DIR="$HOME/.local/share/bluepill/icons"
