@@ -24,7 +24,6 @@ install_extension () {
 
   if ! curl -fsSL "$url" -o "$zip_file"; then
     print_status ko
-    echo "Failed: $uuid"
     return 1
   fi
 
@@ -34,6 +33,17 @@ install_extension () {
   print_status ok
 }
 
+
+enable_extension () {
+  local uuid="$1"
+
+  if gnome-extensions list | grep -q "$uuid"; then
+    print_msg "📦 Enabling $uuid"
+    gnome-extensions enable "$uuid" && print_status ok || print_status ko
+  fi
+}
+
 for ext in "${EXTENSIONS[@]}"; do
   install_extension "$ext" || true
+  enable_extension "$ext" || true
 done
