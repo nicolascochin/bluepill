@@ -5,6 +5,7 @@ EXTENSIONS=(
     "blur-my-shell@aunetx"
     "clipboard-indicator@tudmotu.com"
     "tilingshell@ferrarodomenico.com"
+    "status-area-horizontal-spacing@mathematical.coffee.gmail.com"
 )
 
 BASE_URL="https://extensions.gnome.org"
