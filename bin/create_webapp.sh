@@ -2,13 +2,13 @@
 
 set -euo pipefail
 
-source ~/.local/share/bluepill/helpers/printers.sh
+source $HOME/.local/share/bluepill/helpers/printers.sh
 
 if [[ $# -ne 3 ]]; then
     echo "Usage: $0 <nom> <url> <icone>"
     echo
     echo "Exemple :"
-    echo "  $0 \"ChatGPT\" \"https://chatgpt.com\" chatgpt.png"
+    echo "  $0 \"ChatGPT\" \"https://chatgpt.com\" chatgpt"
     exit 1
 fi
 
@@ -16,18 +16,32 @@ APP_NAME="$1"
 APP_URL="$2"
 ICON_NAME="$3"
 
-APP_ID="$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
+APP_ID="$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' ' ' '-')"
 
 APPLICATIONS_DIR="$HOME/.local/share/applications"
 ICONS_DIR="$HOME/.local/share/bluepill/icons"
 
-mkdir -p "$APPLICATIONS_DIR"
+mkdir -p "$APPLICATIONS_DIR" "$ICONS_DIR"
 
-ICON_PATH="${ICONS_DIR}/${ICON_NAME}"
+ICON_PATH="${ICONS_DIR}/${ICON_NAME}.svg"
+ICON_URL="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/${ICON_NAME}.svg"
 
 if [[ ! -f "$ICON_PATH" ]]; then
-    echo "Erreur : l'icône '$ICON_PATH' est introuvable."
-    exit 1
+    print_msg "📥 Downloading icon '$ICON_NAME'"
+
+    if curl -fsSL "$ICON_URL" -o "$ICON_PATH"; then
+        print_status ok
+    else
+        rm -f "$ICON_PATH"
+        print_status ko
+        exit 1
+    fi
+fi
+
+if flatpak info com.brave.Browser &>/dev/null; then
+    EXEC="flatpak run com.brave.Browser --app=${APP_URL}"
+else
+    EXEC="xdg-open ${APP_URL}"
 fi
 
 cat > "${APPLICATIONS_DIR}/${APP_ID}.desktop" <<EOF
@@ -35,14 +49,15 @@ cat > "${APPLICATIONS_DIR}/${APP_ID}.desktop" <<EOF
 Version=1.0
 Type=Application
 Name=${APP_NAME}
-Exec=xdg-open ${APP_URL}
+Exec=${EXEC}
 Icon=${ICON_PATH}
 Terminal=false
 Categories=Network;
 StartupNotify=true
 EOF
 
-print_msg "📥 Installing web_app $APP_NAME into $APPLICATIONS_DIR"
-chmod +x "${APPLICATIONS_DIR}/${APP_ID}.desktop" \
-  && print_status ok \
-  || print_status ko
+print_msg "📥 Installing web app '${APP_NAME}'"
+
+chmod 644 "${APPLICATIONS_DIR}/${APP_ID}.desktop" \
+    && print_status ok \
+    || print_status ko
