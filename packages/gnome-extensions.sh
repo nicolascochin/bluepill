@@ -1,49 +1,62 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
 EXTENSIONS=(
-  "appindicatorsupport@rgcjonas.gmail.com"
-  "blur-my-shell@aunetx"
-  "clipboard-indicator@tudmotu.com"
-  "tilingshell@ferrarodomenico.com"
+    "appindicatorsupport@rgcjonas.gmail.com"
+    "blur-my-shell@aunetx"
+    "clipboard-indicator@tudmotu.com"
+    "tilingshell@ferrarodomenico.com"
 )
 
-INSTALL_DIR="$HOME/.local/share/gnome-shell/extensions"
+BASE_URL="https://extensions.gnome.org"
+GNOME_VERSION="$(gnome-shell --version | awk '{print $3}')"
+
 TMP_DIR="$(mktemp -d)"
 
-install_extension () {
-  local uuid="$1"
+# S'assure que les extensions utilisateur sont autorisées
+gsettings set org.gnome.shell disable-user-extensions false
 
-  print_msg "📦 Installing $uuid"
+install_extension() {
+    local uuid="$1"
 
-  local zip_file="${TMP_DIR}/${uuid}.zip"
+    print_msg "📦 Installing ${uuid}"
 
-  # ⭐ LE BON ENDPOINT (le seul fiable)
-  local url="https://extensions.gnome.org/download-extension/${uuid}.shell-extension.zip?shell_version=999999999"
+    local json
+    if ! json=$(curl -fsSL \
+        "${BASE_URL}/extension-info/?uuid=${uuid}&shell_version=${GNOME_VERSION}"); then
+        print_status ko
+        return 1
+    fi
 
-  if ! curl -fsSL "$url" -o "$zip_file"; then
-    print_status ko
-    return 1
-  fi
+    local download_url
+    download_url="$(jq -r '.download_url // empty' <<<"$json")"
 
-  mkdir -p "${INSTALL_DIR}/${uuid}"
-  unzip -q -o "$zip_file" -d "${INSTALL_DIR}/${uuid}"
+    if [[ -z "$download_url" ]]; then
+        print_status ko
+        echo "No compatible version found for GNOME ${GNOME_VERSION}"
+        return 1
+    fi
 
-  print_status ok
-}
+    local zip_file="${TMP_DIR}/${uuid}.zip"
 
+    if ! curl -fsSL "${BASE_URL}${download_url}" -o "$zip_file"; then
+        print_status ko
+        return 1
+    fi
 
-enable_extension () {
-  local uuid="$1"
+    if ! gnome-extensions install --force "$zip_file" &>/dev/null; then
+        print_status ko
+        return 1
+    fi
 
-  if gnome-extensions list | grep -q "$uuid"; then
-    print_msg "📦 Enabling $uuid"
-    gnome-extensions enable "$uuid" && print_status ok || print_status ko
-  fi
+    print_status ok
+
+    print_msg "🔌 Enabling ${uuid}"
+
+    gnome-extensions enable "$uuid" \
+        && print_status ok \
+        || print_status ko
 }
 
 for ext in "${EXTENSIONS[@]}"; do
-  install_extension "$ext" || true
-  enable_extension "$ext" || true
+    install_extension "$ext" || true
 done
