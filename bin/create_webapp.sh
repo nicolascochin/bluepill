@@ -21,7 +21,7 @@ APP_ID="$(echo "$APP_NAME" \
     | tr ' ' '-')"
 
 APPLICATIONS_DIR="$HOME/.local/share/applications"
-ICONS_DIR="$HOME/.local/share/bluepill/icons"
+ICONS_DIR="$HOME/.local/share/icons"
 
 mkdir -p "$APPLICATIONS_DIR" "$ICONS_DIR"
 
