@@ -28,7 +28,7 @@ install_extension() {
         return 1
     fi
 
-    echo "${BASE_URL}/extension-info/?uuid=${uuid}&shell_version=${GNOME_VERSION}")
+    echo "${BASE_URL}/extension-info/?uuid=${uuid}&shell_version=${GNOME_VERSION}"
 
     local download_url
     download_url="$(jq -r '.download_url // empty' <<<"$json")"
