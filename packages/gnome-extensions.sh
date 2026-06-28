@@ -19,7 +19,7 @@ gsettings set org.gnome.shell disable-user-extensions false
 install_extension() {
     local uuid="$1"
 
-    print_msg "📦 Installing ${uuid}"
+    print_msg "📦 Installing ${ext}"
 
     local json
     if ! json=$(curl -fsSL \
