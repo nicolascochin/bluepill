@@ -13,3 +13,4 @@ done
 
 run_installers "preflight"
 run_installers "packages"
+run_installers "config"
