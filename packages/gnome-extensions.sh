@@ -28,8 +28,6 @@ install_extension() {
         return 1
     fi
 
-    echo "${BASE_URL}/extension-info/?uuid=${uuid}&shell_version=${GNOME_VERSION}"
-
     local download_url
     download_url="$(jq -r '.download_url // empty' <<<"$json")"
 
@@ -42,6 +40,7 @@ install_extension() {
     local zip_file="${TMP_DIR}/${uuid}.zip"
 
     if ! curl -fsSL "${BASE_URL}${download_url}" -o "$zip_file"; then
+    echo "coucou"
         print_status ko
         return 1
     fi
