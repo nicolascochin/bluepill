@@ -29,7 +29,7 @@ ICON_PATH="${ICONS_DIR}/${ICON_NAME}.svg"
 ICON_URL="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/${ICON_NAME}.svg"
 
 if [[ ! -f "$ICON_PATH" ]]; then
-    print_msg "⬇️ Downloading icon '$ICON_NAME'"
+    print_msg "⬇️  Downloading icon '$ICON_NAME'"
 
     if curl -fsSL "$ICON_URL" -o "$ICON_PATH"; then
         print_status ok
