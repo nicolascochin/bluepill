@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source $HOME/.local/share/bluepill/helpers/printers.sh
+
+if [[ $# -ne 3 ]]; then
+    echo "Usage: $0 <nom> <url> <icone>"
+    echo
+    echo "Exemple :"
+    echo "  $0 \"ChatGPT\" \"https://chatgpt.com\" chatgpt"
+    exit 1
+fi
+
+APP_NAME="$1"
+APP_URL="$2"
+ICON_NAME="$3"
+
+APP_ID="$(echo "$APP_NAME" \
+    | tr '[:upper:]' '[:lower:]' \
+    | tr ' ' '-')"
+
+APPLICATIONS_DIR="$HOME/.local/share/applications"
+ICONS_DIR="$HOME/.local/share/icons"
+
+mkdir -p "$APPLICATIONS_DIR" "$ICONS_DIR"
+
+ICON_PATH="${ICONS_DIR}/${ICON_NAME}.svg"
+ICON_URL="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/${ICON_NAME}.svg"
+
+if [[ ! -f "$ICON_PATH" ]]; then
+    print_msg "⬇️ Downloading icon '$ICON_NAME'"
+
+    if curl -fsSL "$ICON_URL" -o "$ICON_PATH"; then
+        print_status ok
+    else
+        rm -f "$ICON_PATH"
+        print_status ko
+        exit 1
+    fi
+fi
+
+if flatpak info com.brave.Browser &>/dev/null; then
+    EXEC="flatpak run com.brave.Browser --app=${APP_URL}"
+else
+    EXEC="xdg-open ${APP_URL}"
+fi
+
+cat > "${APPLICATIONS_DIR}/${APP_ID}.desktop" <<EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=${APP_NAME}
+Exec=${EXEC}
+Icon=${ICON_PATH}
+Terminal=false
+Categories=Network;
+StartupNotify=true
+EOF
+
+print_msg "📥 Installing web app '${APP_NAME}'"
+
+chmod 644 "${APPLICATIONS_DIR}/${APP_ID}.desktop" \
+    && print_status ok \
+    || print_status ko
