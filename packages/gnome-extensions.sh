@@ -60,6 +60,6 @@ install_extension() {
 
 for ext in "${EXTENSIONS[@]}"; do
     # install_extension "$ext" || true
-    print_msg "📦 Installing ${uuid}"
+    print_msg "📦 Installing ${ext}"
     (gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions --method org.gnome.Shell.Extensions.InstallRemoteExtension "${ext}" || true) && print_status ok
 done
