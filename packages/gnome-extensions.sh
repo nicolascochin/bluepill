@@ -40,12 +40,11 @@ install_extension() {
     local zip_file="${TMP_DIR}/${uuid}.zip"
 
     if ! curl -fsSL "${BASE_URL}${download_url}" -o "$zip_file"; then
-    echo "coucou"
         print_status ko
         return 1
     fi
 
-    if ! gnome-extensions install --force "$zip_file" &>/dev/null; then
+    if ! gnome-extensions install "$zip_file" &>/dev/null; then
         print_status ko
         return 1
     fi
