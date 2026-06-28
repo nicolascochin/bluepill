@@ -20,46 +20,11 @@ install_extension() {
     local uuid="$1"
 
     print_msg "📦 Installing ${ext}"
-
-    local json
-    if ! json=$(curl -fsSL \
-        "${BASE_URL}/extension-info/?uuid=${uuid}&shell_version=${GNOME_VERSION}"); then
-        print_status ko
-        return 1
-    fi
-
-    local download_url
-    download_url="$(jq -r '.download_url // empty' <<<"$json")"
-
-    if [[ -z "$download_url" ]]; then
-        print_status ko
-        echo "No compatible version found for GNOME ${GNOME_VERSION}"
-        return 1
-    fi
-
-    local zip_file="${TMP_DIR}/${uuid}.zip"
-
-    if ! curl -fsSL "${BASE_URL}${download_url}" -o "$zip_file"; then
-        print_status ko
-        return 1
-    fi
-
-    if ! gnome-extensions install "$zip_file" &>/dev/null; then
-        print_status ko
-        return 1
-    fi
-
-    print_status ok
-
-    print_msg "🔌 Enabling ${uuid}"
-
-    gnome-extensions enable "$uuid" \
-        && print_status ok \
-        || print_status ko
+    (gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions --method org.gnome.Shell.Extensions.InstallRemoteExtension "${ext}" > /dev/null 2>&1 || true) && print_status ok
 }
 
+
+
 for ext in "${EXTENSIONS[@]}"; do
-    # install_extension "$ext" || true
-    print_msg "📦 Installing ${ext}"
-    (gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions --method org.gnome.Shell.Extensions.InstallRemoteExtension "${ext}" || true) && print_status ok
+  install_extension "$ext" || true
 done
