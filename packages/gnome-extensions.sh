@@ -59,5 +59,6 @@ install_extension() {
 }
 
 for ext in "${EXTENSIONS[@]}"; do
-    install_extension "$ext" || true
+    # install_extension "$ext" || true
+    gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions --method org.gnome.Shell.Extensions.InstallRemoteExtension "${ext}"
 done
