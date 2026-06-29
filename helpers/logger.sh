@@ -1,3 +1,5 @@
+#!/bin/bash 
+
 run_logged() {
     local description="$1"
     shift
