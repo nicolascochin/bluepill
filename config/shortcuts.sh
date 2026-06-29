@@ -7,6 +7,10 @@ BASE="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
 SHORTCUTS=(
   "terminal|Terminal|gnome-terminal|<Primary><Alt>t"
   "vscode|VS Code|code|<Primary><Alt>c"
+  "distrobox-fedora|Distrobox Fedora|flatpak run org.wezfurlong.wezterm start -- ${HOME}/.local/bin/distroboxctl run --image fedora|<Primary><Shift>F1"
+  "distrobox-debian|Distrobox Debian|flatpak run org.wezfurlong.wezterm start -- ${HOME}/.local/bin/distroboxctl run --image debian|<Primary><Shift>F2"
+  "distrobox-arch|Distrobox Arch|flatpak run org.wezfurlong.wezterm start -- ${HOME}/.local/bin/distroboxctl run --image archlinux|<Primary><Shift>F3"
+  "distrobox-ubuntu|Distrobox Ubuntu|flatpak run org.wezfurlong.wezterm start -- ${HOME}/.local/bin/distroboxctl run --image ubuntu|<Primary><Shift>F4"
 #  "my-script|My Script|/home/$USER/bin/my-script.sh|<Super>F12"
 )
 paths=()
