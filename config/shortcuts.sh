@@ -9,15 +9,7 @@ SHORTCUTS=(
   "vscode|VS Code|code|<Primary><Alt>c"
 #  "my-script|My Script|/home/$USER/bin/my-script.sh|<Super>F12"
 )
-
-# Liste actuelle des raccourcis
-current="$(gsettings get "$SCHEMA" custom-keybindings)"
-
-# Extraction des chemins existants
 paths=()
-while read -r path; do
-    [[ -n "$path" ]] && paths+=("$path")
-done < <(grep -o "'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/[^']*/'" <<< "$current")
 
 for shortcut in "${SHORTCUTS[@]}"; do
     IFS='|' read -r id name command binding <<< "$shortcut"
@@ -28,8 +20,9 @@ for shortcut in "${SHORTCUTS[@]}"; do
 
     # Ajouter le chemin uniquement s'il n'existe pas déjà
     found=false
+
     for p in "${paths[@]}"; do
-        if [[ "$p" == "$quoted_path" ]]; then
+        if [[ "$p" == "'$path'" ]]; then
             found=true
             break
         fi
@@ -42,13 +35,12 @@ for shortcut in "${SHORTCUTS[@]}"; do
         print_msg "🛠️ Updating shortcut: $name"
     fi
 
-    gsettings set "$schema" name "$name" \
-      && gsettings set "$schema" command "$command" \
-      && gsettings set "$schema" binding "$binding" \
+    command gsettings set "$schema" name "$name" \
+      && command gsettings set "$schema" command "$command" \
+      && command gsettings set "$schema" binding "$binding" \
       && print_status ok \
       || print_status ko
 done
 
-# Mettre à jour la liste des raccourcis
 list="[$(IFS=,; echo "${paths[*]}")]"
-gsettings set "$SCHEMA" custom-keybindings "$list"
+command gsettings set "$SCHEMA" custom-keybindings "$list"
