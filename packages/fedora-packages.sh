@@ -4,6 +4,7 @@ PACKAGES=(
     distrobox
     podman-compose
     zsh
+    chezmoi
 )
 
 print_msg "📥 Installing silverblue packages"
