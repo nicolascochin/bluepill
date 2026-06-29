@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat <<EOF
+Usage:
+    $0 <command> --image <image> [options]
+
+Commands:
+    run         Create the distrobox if needed, then enter it.
+    destroy     Stop and remove the distrobox.
+
+Options:
+    -i, --image IMAGE    Docker/Podman image.
+    -e, --ephemeral      Use distrobox ephemeral (run only).
+
+All other options are forwarded to:
+    - distrobox create
+    - distrobox ephemeral
+
+Examples:
+    $0 run --image debian
+    $0 run --image fedora:42
+    $0 run --image archlinux --ephemeral
+    $0 run --image debian --home ~/dbx/debian
+    $0 destroy --image debian
+EOF
+    exit 1
+}
+
+[[ $# -ge 1 ]] || usage
+
+COMMAND="$1"
+shift
+
+case "$COMMAND" in
+    run|destroy)
+        ;;
+    *)
+        usage
+        ;;
+esac
+
+IMAGE=""
+EPHEMERAL=false
+EXTRA_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -i|--image)
+            [[ $# -ge 2 ]] || usage
+            IMAGE="$2"
+            shift 2
+            ;;
+        -e|--ephemeral)
+            EPHEMERAL=true
+            shift
+            ;;
+        *)
+            EXTRA_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+[[ -n "$IMAGE" ]] || usage
+
+normalize_image() {
+    local image="$1"
+
+    [[ "$image" == *:* ]] || image="${image}:latest"
+
+    IMAGE="$image"
+    BASE_IMAGE="${IMAGE%:*}"
+    NAME="distrobox-$(echo "$BASE_IMAGE" | sed 's|[^[:alnum:]]|-|g')"
+}
+
+distrobox_exists() {
+    distrobox list --no-color | awk 'NR>1 {print $1}' | grep -qx "$NAME"
+}
+
+normalize_image "$IMAGE"
+
+case "$COMMAND" in
+    destroy)
+        if distrobox_exists; then
+            echo "Stopping $NAME..."
+            distrobox stop "$NAME" || true
+
+            echo "Removing $NAME..."
+            distrobox rm "$NAME"
+
+            echo "Done."
+        else
+            echo "Distrobox '$NAME' does not exist."
+        fi
+        ;;
+
+    run)
+        if $EPHEMERAL; then
+            exec distrobox ephemeral \
+                --image "$IMAGE" \
+                "${EXTRA_ARGS[@]}"
+        fi
+
+        if ! distrobox_exists; then
+            echo "Creating $NAME..."
+            distrobox create \
+                --image "$IMAGE" \
+                --name "$NAME" \
+                "${EXTRA_ARGS[@]}"
+        fi
+
+        exec distrobox enter "$NAME"
+        ;;
+esac
