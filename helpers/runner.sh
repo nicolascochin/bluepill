@@ -5,7 +5,7 @@ run_installers() {
 
   for f in "${BLUEPILL_LOCAL}/${folder}"/*.sh; do
     [[ -f "$f" ]] || continue
-    echo -e "\nRunning : $f"
+    echo -e "\n▶ Running: $f" | tee -a "$BLUEPILL_LOG"
     source "$f"
   done
 }
