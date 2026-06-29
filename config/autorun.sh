@@ -3,7 +3,7 @@
 AUTORUN_DIR="${HOME}/.config/autostart"
 FLATPAK_DIR="/var/lib/flatpak/app"
 AUTO_APPS=(
-  "${FLATPAK_DIR}/com.protonvpn.www"
+  "${FLATPAK_DIR}/com.protonvpn.www.desktop"
 )
 
 mkdir -p "$AUTORUN_DIR"
