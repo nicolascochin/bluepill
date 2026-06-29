@@ -4,7 +4,6 @@ PACKAGES=(
     distrobox
     podman-compose
     zsh
-    alacritty
 )
 
 print_msg "📥 Installing silverblue packages"
