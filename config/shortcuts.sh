@@ -44,7 +44,7 @@ for shortcut in "${SHORTCUTS[@]}"; do
 
     gsettings set "$schema" name "$name" \\
       && gsettings set "$schema" command "$command" \\
-      && gsettings set "$schema" binding "$binding"  \\
+      && gsettings set "$schema" binding "$binding" \\
       && print_status ok \\
       || print_status ko
 done
