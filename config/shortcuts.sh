@@ -42,10 +42,10 @@ for shortcut in "${SHORTCUTS[@]}"; do
         print_msg "🛠️ Updating shortcut: $name"
     fi
 
-    gsettings set "$schema" name "$name" \\
-      && gsettings set "$schema" command "$command" \\
-      && gsettings set "$schema" binding "$binding" \\
-      && print_status ok \\
+    gsettings set "$schema" name "$name" \
+      && gsettings set "$schema" command "$command" \
+      && gsettings set "$schema" binding "$binding" \
+      && print_status ok \
       || print_status ko
 done
 
