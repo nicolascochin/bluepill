@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AUTORUN_DIR="${HOME}/.config/autostart"
-FLATPAK_DIR="/var/lib/flatpak/app"
+FLATPAK_DIR="/var/lib/flatpak/exports/share/applications"
 AUTO_APPS=(
   "${FLATPAK_DIR}/com.protonvpn.www.desktop"
 )
