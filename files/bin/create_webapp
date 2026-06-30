@@ -29,7 +29,11 @@ ICON_URL="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/${ICON_NAM
 mkdir -p "$APPLICATIONS_DIR" "$ICONS_DIR"
 
 if [[ ! -f "$ICON_PATH" ]]; then
-  run_logged "⬇️  Downloading icon '$ICON_NAME'" curl -fsSL "$ICON_URL" -o "$ICON_PATH" || { rm -f "$ICON_PATH" && exit 1 }
+  run_logged "⬇️  Downloading icon '$ICON_NAME'" \
+    curl -fsSL "$ICON_URL" -o "$ICON_PATH" || {
+      rm -f "$ICON_PATH"
+      exit 1
+    }
 fi
 
 if flatpak info com.brave.Browser &>/dev/null; then
