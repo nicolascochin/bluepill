@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-FONT_DIR=${HOME}/.local/share/fonts
+FONT_DIR="${HOME}/.local/share/fonts"
 
 declare -A FONTS=(
   ["FiraCode"]="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
@@ -8,41 +8,37 @@ declare -A FONTS=(
 )
 
 download_and_install_font() {
-  local NAME="$1"
-  local URL="$2"
+  local name="$1"
+  local url="$2"
+  local tmp_file
 
-  local TMP_FILE="/tmp/${NAME}.archive"
+  tmp_file="$(mktemp "/tmp/${name}.XXXXXX")"
 
-  print_msg "📥 Installing $NAME"
-
-  if curl -fsSL "$URL" -o "$TMP_FILE"; then
-    case "$URL" in
-      *.zip)
-        unzip -oq "$TMP_FILE" -d "$FONT_DIR"
-        ;;
-      *.tar.gz|*.tgz)
-        tar -xzf "$TMP_FILE" -C "$FONT_DIR"
-        ;;
-      *)
-        print_status ko
-        echo "❌ Unknown archive format: $URL"
-        rm -f "$TMP_FILE"
-        return 1
-        ;;
-    esac
-
-    rm -f "$TMP_FILE"
-    print_status ok
-  else
-    rm -f "$TMP_FILE"
-    print_status ko
+  if ! curl -fsSL "$url" -o "$tmp_file"; then
+    rm -f "$tmp_file"
     return 1
   fi
+
+  case "$url" in
+    *.zip)
+      unzip -oq "$tmp_file" -d "$FONT_DIR"
+      ;;
+    *.tar.gz|*.tgz)
+      tar -xzf "$tmp_file" -C "$FONT_DIR"
+      ;;
+    *)
+      echo "Unknown archive format: $url" >&2
+      rm -f "$tmp_file"
+      return 1
+      ;;
+  esac
+
+  rm -f "$tmp_file"
 }
 
-for FONT_NAME in "${!FONTS[@]}"; do
-  download_and_install_font "$FONT_NAME" "${FONTS[$FONT_NAME]}"
+for font in "${!FONTS[@]}"; do
+  run_logged "📥 Installing ${font}" download_and_install_font "$font" "${FONTS[$font]}" 
 done
 
-print_msg "🔄 Refreshing font cache"
-fc-cache -fv >/dev/null && print_status ok || print_status ko
+run_logged "🔄 Refreshing font cache" \
+    fc-cache -fv || exit 1
