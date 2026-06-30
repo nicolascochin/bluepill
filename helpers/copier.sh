@@ -20,10 +20,8 @@ copy_file() {
   dest_dir="$(dirname "$dest")"
 
   if [[ ! -d "$dest_dir" ]]; then
-    print_msg "📁 Creating directory $dest_dir"
     run_logged "📁 Creating directory $dest_dir" mkdir -p "$dest_dir"  || return 1
   fi
 
-  print_msg "📋 Copying $src to $dest"
   run_logged "📋 Copying $src to $dest" cp -- "$src" "$dest" || return 1
 }
