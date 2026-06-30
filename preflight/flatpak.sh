@@ -1,7 +1,7 @@
 #!/bin/bash
 
 check_flathub() {
-    flatpak remotes | grep -q '^flathub$'
+    flatpak remotes | grep -q '^flathub'
 }
 
 enable_flathub() {
