@@ -41,7 +41,7 @@ declare -A APPS=(
 for app in "${!APPS[@]}"; do
     if ! flatpak_installed "$app"; then
         run_logged "📥 Installing ${APPS[$app]}" \
-            flatpak_install "$app" || exit 1
+            flatpak_install "$app"
     fi
 done
 
@@ -49,7 +49,7 @@ while read -r app; do
     [[ -z "$app" ]] && continue
 
     run_logged "📥 Re-installing $app from Flathub" \
-        reinstall_from_flathub "$app" || exit 1
+        reinstall_from_flathub "$app"
 
 done < <(
     flatpak list --app --columns=application,origin |
