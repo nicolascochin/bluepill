@@ -11,7 +11,8 @@ BLUEPILL_LOG="$(mktemp -t bluepill-install-XXXXXX.log)"
 for f in ${BLUEPILL_LOCAL}/helpers/*.sh; do
   source "$f"
 done
-
+echo "Log file is ${BLUEPILL_LOG}"
+echo
 run_installers "preflight"
 run_installers "packages"
 run_installers "config"
