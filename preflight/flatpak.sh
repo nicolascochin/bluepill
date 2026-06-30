@@ -1,18 +1,24 @@
 #!/bin/bash
 
 check_flathub() {
-  flatpak remotes | grep -q flathub
+    flatpak remotes | grep -q '^flathub$'
 }
 
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+enable_flathub() {
+    flatpak remote-modify --no-filter --enable flathub
+}
 
-print_msg "🔍 Checking if flathub is enabled"
-if check_flathub; then
-  print_status ok
-else
-  print_status ko
-  print_msg "📥 Installing flathub repository"
-  flatpak remote-modify --no-filter --enable flathub && print_status ok || print_status ko
-  print_msg "🔧 Enabling flathub"
-  check_flathub && print_status ok || (print_status ko && exit 1)
-fi
+
+flatpak remote-add --if-not-exists \
+    flathub \
+    https://dl.flathub.org/repo/flathub.flatpakrepo >/dev/null
+
+run_logged "🔍 Checking if Flathub is enabled" \
+    check_flathub || {
+
+    run_logged "🔧 Enabling Flathub" \
+        enable_flathub || exit 1
+
+    run_logged "🔍 Verifying Flathub is enabled" \
+        check_flathub || exit 1
+}
