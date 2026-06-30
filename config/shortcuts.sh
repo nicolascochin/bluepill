@@ -34,8 +34,8 @@ for shortcut in "${SHORTCUTS[@]}"; do
 
   [[ " ${paths[*]} " =~ ${quoted_path} ]] || paths+=("$quoted_path")
 
-  run_logged "🛠️ Configuring shortcut: $name" configure_shortcut "$schema" "$name" "$command" "$binding" 
+  run_logged "🛠️  Configuring shortcut: $name" configure_shortcut "$schema" "$name" "$command" "$binding" 
 done
 
 list="[$(IFS=,; echo "${paths[*]}")]"
-run_logged "🛠️ Registering custom shortcuts" gsettings set "$SCHEMA" custom-keybindings "$list" 
+run_logged "🛠️  Registering custom shortcuts" gsettings set "$SCHEMA" custom-keybindings "$list" 
