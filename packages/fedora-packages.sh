@@ -7,4 +7,4 @@ PACKAGES=(
     chezmoi
 )
 
-run_logged "📥 Installing silverblue packages" rpm-ostree install --apply-live --idempotent --quiet "${PACKAGES[@]}" 
+run_logged "📥 Installing silverblue packages" rpm-ostree install -y --apply-live --idempotent --quiet "${PACKAGES[@]}" 
