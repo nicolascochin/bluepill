@@ -16,3 +16,6 @@ echo
 run_installers "preflight"
 run_installers "packages"
 run_installers "config"
+echo
+echo "Restart the computer"
+echo "Check https://github.com/nicolascochin/dotfiles to setup zsh"
