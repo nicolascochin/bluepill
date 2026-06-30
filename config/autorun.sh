@@ -13,9 +13,6 @@ for src in "${AUTO_APPS[@]}"; do
   link="${AUTORUN_DIR}/${target}"
 
   if [[ ! -e "$link" ]]; then
-    print_msg "🚀 Autostart $target" \
-      && ln -s "$src" "$link" \
-      && print_status ok \
-      || print_status ko
+    run_logged "🚀 Autostart $target" ln -s "$src" "$link" 
   fi
 done
