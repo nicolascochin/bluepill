@@ -100,7 +100,7 @@ case "$COMMAND" in
         if $EPHEMERAL; then
             exec distrobox ephemeral \
                 --image "$IMAGE" \
-                --additional-packages zsh \
+                --additional-packages "zsh git" \
                 "${EXTRA_ARGS[@]}"
         fi
 
@@ -109,7 +109,7 @@ case "$COMMAND" in
             distrobox create \
                 --image "$IMAGE" \
                 --name "$NAME" \
-                --additional-packages zsh \
+                --additional-packages "zsh git" \
                 "${EXTRA_ARGS[@]}"
         fi
 
