@@ -7,8 +7,4 @@ PACKAGES=(
     chezmoi
 )
 
-print_msg "📥 Installing silverblue packages"
-
-rpm-ostree install --idempotent --quiet "${PACKAGES[@]}" > /dev/null \
-    && print_status ok \
-    || print_status ko
+run_logged "📥 Installing silverblue packages" rpm-ostree install --idempotent --quiet "${PACKAGES[@]}" 
