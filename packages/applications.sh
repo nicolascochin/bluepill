@@ -41,7 +41,7 @@ declare -A APPS=(
 for app in "${!APPS[@]}"; do
     if ! flatpak_installed "$app"; then
         run_logged "📥 Installing ${APPS[$app]}" \
-            flatpak_install "$app"
+            flatpak_install "$app" || true
     fi
 done
 
