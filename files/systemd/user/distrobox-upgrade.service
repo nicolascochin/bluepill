@@ -1,0 +1,6 @@
+[Unit]
+Description=Upgrade all Distrobox containers
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/distrobox-upgrade-all
