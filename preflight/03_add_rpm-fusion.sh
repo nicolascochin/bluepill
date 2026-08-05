@@ -5,11 +5,11 @@ is_installed() {
     rpm-ostree status --json | jq -e --arg pkg "$1" '
         .deployments[0]
         | (
-            .packages // []
-            + .requested-packages // []
-            + .requested-local-packages // []
+            (.packages // [])
+            + (."requested-packages" // [])
+            + (."requested-local-packages" // [])
           )
-        | index($pkg)
+        | any((. == $pkg) or startswith($pkg + "-"))
     ' >/dev/null
 }
 
