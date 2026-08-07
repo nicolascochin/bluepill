@@ -1,0 +1,12 @@
+[Unit]
+Description=Symlink docker.sock vers podman.sock
+After=podman.socket
+Requires=podman.socket
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sudo /usr/bin/ln -sf /run/user/1000/podman/podman.sock /var/run/docker.sock
+RemainAfterExit=yes
+
+[Install]
+WantedBy=podman.socket
