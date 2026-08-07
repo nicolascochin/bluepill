@@ -36,6 +36,7 @@ declare -A APPS=(
   ["io.github.CyberTimon.RapidRAW"]="Rapid RAW"
   ["com.visualstudio.code"]="Visual Studio Code"
   ["org.wezfurlong.wezterm"]="Wezterm"
+  ["om.valvesoftware.Steam"]="Steam"
 )
 
 for app in "${!APPS[@]}"; do
