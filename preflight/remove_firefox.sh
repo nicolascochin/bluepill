@@ -5,7 +5,7 @@ is_firefox_installed() {
 }
 
 if ! is_firefox_installed; then
-  print_msg "Native Firefox already removed"
+  print_msg "🗑️  Native Firefox already removed"
   print_status ok
 else
   run_logged \
