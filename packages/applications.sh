@@ -29,6 +29,7 @@ declare -A APPS=(
   ["com.spotify.Client"]="Spotify"
   ["org.videolan.VLC"]="VLC"
   ["com.brave.Browser"]="Brave Browser"
+  ["org.mozilla.firefox"]="Firefox Browser"
   ["io.podman_desktop.PodmanDesktop"]="Podman Desktop"
   ["rest.insomnia.Insomnia"]="Insomnia"
   ["com.slack.Slack"]="Slack"
@@ -37,6 +38,8 @@ declare -A APPS=(
   ["com.visualstudio.code"]="Visual Studio Code"
   ["org.wezfurlong.wezterm"]="Wezterm"
   ["om.valvesoftware.Steam"]="Steam"
+  ["org.freedesktop.Platform.ffmpeg-full"]="Codecs ffmpeg"
+  
 )
 
 for app in "${!APPS[@]}"; do
