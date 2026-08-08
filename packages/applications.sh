@@ -43,6 +43,7 @@ declare -A APPS=(
   ["com.visualstudio.code"]="Visual Studio Code"
   ["org.wezfurlong.wezterm"]="Wezterm"
   ["com.valvesoftware.Steam"]="Steam"
+  ["io.github.pwr_solaar.solaar"]="Solaar"
   ["org.freedesktop.Platform.ffmpeg-full//${FFMPEG_BRANCH}"]="Codecs ffmpeg"
   
 )
