@@ -11,11 +11,11 @@ needs_conversion() {
 
 
 if ! needs_conversion; then
-  print_msg "RPM Fusion converted"
+  print_msg "📦 RPM Fusion converted"
   print_status ok
 else
   run_logged \
-    "Converting RPM Fusion LocalPackages into LayeredPackages" \
+    "📦 Converting RPM Fusion LocalPackages into LayeredPackages" \
       sudo rpm-ostree update \
         --uninstall rpmfusion-free-release \
         --uninstall rpmfusion-nonfree-release \
