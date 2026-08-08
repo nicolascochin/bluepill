@@ -8,9 +8,7 @@ EXTENSIONS=(
   "status-area-horizontal-spacing@mathematical.coffee.gmail.com"
 )
 
-BASE_URL="https://extensions.gnome.org"
-GNOME_VERSION="$(gnome-shell --version | awk '{print $3}')"
-TMP_DIR="$(mktemp -d)"
+EXTENSIONS_DIR="${HOME}/.local/share/gnome-shell/extensions"
 
 # S'assure que les extensions utilisateur sont autorisées
 gsettings set org.gnome.shell disable-user-extensions false
@@ -18,9 +16,16 @@ gsettings set org.gnome.shell disable-user-extensions false
 install_extension() {
   local uuid="$1"
 
-  (gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions --method org.gnome.Shell.Extensions.InstallRemoteExtension "${ext}" || true)
+  if [[ -d "${EXTENSIONS_DIR}/${uuid}" ]]; then
+    return 0
+  fi
+
+  gdbus call --session \
+    --dest org.gnome.Shell.Extensions \
+    --object-path /org/gnome/Shell/Extensions \
+    --method org.gnome.Shell.Extensions.InstallRemoteExtension "${uuid}" || true
 }
 
 for ext in "${EXTENSIONS[@]}"; do
-  run_logged "📦 Installing ${ext}" install_extension "$ext" || true
+  run_logged "📦 Installing ${ext}" install_extension "$ext"
 done
