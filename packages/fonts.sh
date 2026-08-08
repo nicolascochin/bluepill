@@ -7,10 +7,17 @@ declare -A FONTS=(
   ["Meslo"]="https://github.com/romkatv/powerlevel10k-media/releases/download/v2.3.3/meslo-lgs-nf.tar.gz"
 )
 
+mkdir -p "$FONT_DIR"
+
 download_and_install_font() {
   local name="$1"
   local url="$2"
   local tmp_file
+
+  if find "$FONT_DIR" -iname "*${name}*" -print -quit | grep -q .; then
+    print_status "ok" "${name} déjà installée"
+    return 0
+  fi
 
   tmp_file="$(mktemp "/tmp/${name}.XXXXXX")"
 
@@ -37,7 +44,7 @@ download_and_install_font() {
 }
 
 for font in "${!FONTS[@]}"; do
-  run_logged "📥 Installing ${font}" download_and_install_font "$font" "${FONTS[$font]}" 
+  run_logged "📥 Installing ${font}" download_and_install_font "$font" "${FONTS[$font]}"
 done
 
 run_logged "🔄 Refreshing font cache" \
