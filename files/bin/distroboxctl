@@ -79,7 +79,31 @@ distrobox_exists() {
     distrobox list --no-color | awk 'NR>1 {print $1}' | grep -qx "$NAME"
 }
 
+packages_for_image() {
+    local base="$1"
+
+    case "$base" in
+        debian|ubuntu*)
+            echo "zsh git curl build-essential"
+            ;;
+        fedora*)
+            echo "zsh git bat fd-find ripgrep python3-pygments rclone PackageKit-command-not-found"
+            ;;
+        archlinux*|arch)
+            echo "zsh git curl base-devel"
+            ;;
+        alpine*)
+            echo "zsh git curl build-base"
+            ;;
+        *)
+            echo "zsh git"
+            ;;
+    esac
+}
+
 normalize_image "$IMAGE"
+PACKAGES="$(packages_for_image "$BASE_IMAGE")"
+
 
 case "$COMMAND" in
     destroy)
@@ -109,7 +133,7 @@ case "$COMMAND" in
             distrobox create \
                 --image "$IMAGE" \
                 --name "$NAME" \
-                --additional-packages "zsh git" \
+                --additional-packages "$PACKAGES" \
                 "${EXTRA_ARGS[@]}"
         fi
 
