@@ -15,7 +15,6 @@ download_and_install_font() {
   local tmp_file
 
   if find "$FONT_DIR" -iname "*${name}*" -print -quit | grep -q .; then
-    print_status "ok" "${name} déjà installée"
     return 0
   fi
 
