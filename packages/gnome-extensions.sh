@@ -2,6 +2,7 @@
 
 EXTENSIONS=(
   "appindicatorsupport@rgcjonas.gmail.com"
+  "azwallpaper@azwallpaper.gitlab.com"
   "blur-my-shell@aunetx"
   "clipboard-indicator@tudmotu.com"
   "tilingshell@ferrarodomenico.com"
