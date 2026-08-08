@@ -25,6 +25,11 @@ APPLICATIONS_DIR="$HOME/.local/share/applications"
 ICONS_DIR="$HOME/.local/share/icons"
 ICON_PATH="${ICONS_DIR}/${ICON_NAME}.svg"
 ICON_URL="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/${ICON_NAME}.svg"
+DESKTOP_FILE="${APPLICATIONS_DIR}/${APP_ID}.desktop"
+
+if [[ -f "$DESKTOP_FILE" ]]; then
+  exit 0
+fi
 
 mkdir -p "$APPLICATIONS_DIR" "$ICONS_DIR"
 
@@ -42,7 +47,7 @@ else
   EXEC="xdg-open ${APP_URL}"
 fi
 
-cat > "${APPLICATIONS_DIR}/${APP_ID}.desktop" <<EOF
+cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -54,4 +59,4 @@ Categories=Network;
 StartupNotify=true
 EOF
 
-run_logged "📥 Installing web app '${APP_NAME}'" chmod 644 "${APPLICATIONS_DIR}/${APP_ID}.desktop" 
+run_logged "📥 Installing web app '${APP_NAME}'" chmod 644 "$DESKTOP_FILE"
