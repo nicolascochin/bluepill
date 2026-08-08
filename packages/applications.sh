@@ -22,6 +22,11 @@ reinstall_from_flathub() {
     && flatpak_install "$app"
 }
 
+FFMPEG_BRANCH="$(
+  flatpak list --runtime --columns=application,branch \
+    | awk '$1=="org.freedesktop.Platform"{print $2; exit}'
+)"
+
 declare -A APPS=(
   ["com.protonvpn.www"]="Proton VPN"
   ["me.proton.Pass"]="Proton Pass"
@@ -37,8 +42,8 @@ declare -A APPS=(
   ["io.github.CyberTimon.RapidRAW"]="Rapid RAW"
   ["com.visualstudio.code"]="Visual Studio Code"
   ["org.wezfurlong.wezterm"]="Wezterm"
-  ["om.valvesoftware.Steam"]="Steam"
-  ["org.freedesktop.Platform.ffmpeg-full"]="Codecs ffmpeg"
+  ["com.valvesoftware.Steam"]="Steam"
+  ["org.freedesktop.Platform.ffmpeg-full//${FFMPEG_BRANCH}"]="Codecs ffmpeg"
   
 )
 
