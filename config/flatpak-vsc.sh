@@ -12,5 +12,12 @@ run_logged "🛠️ Configure VSC" flatpak override \
 
   # run_logged "🔗 Create a symlink docker" sudo ln -sf /run/user/1000/podman/podman.sock /var/run/docker.sock
 
-run_logged "🔗 Create file ${_pds_conf}" printf 'L+ /run/docker.sock - - - - %s\n' "${_pds_sock}" | sudo tee "${_pds_conf}" >/dev/null
+print_msg "🔗 Create file ${_pds_conf}"
+if printf 'L+ /run/docker.sock - - - - %s\n' "${_pds_sock}" | sudo tee "${_pds_conf}" >/dev/null; then
+ print_status ok
+else
+  print_status ko 
+fi 
+
+
 run_logged "🔗 Apply config file" sudo systemd-tmpfiles --create "${_pds_conf}"
