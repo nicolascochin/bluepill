@@ -28,6 +28,8 @@ ICON_URL="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/${ICON_NAM
 DESKTOP_FILE="${APPLICATIONS_DIR}/${APP_ID}.desktop"
 
 if [[ -f "$DESKTOP_FILE" ]]; then
+  print_msg "📥 Installing web app '${APP_NAME}'"
+  print_status "ok" 
   exit 0
 fi
 
