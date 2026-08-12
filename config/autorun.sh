@@ -14,5 +14,8 @@ for src in "${AUTO_APPS[@]}"; do
 
   if [[ ! -e "$link" ]]; then
     run_logged "🚀 Autostart $target" ln -s "$src" "$link" 
+  else 
+    print_msg "🚀 Autostart $target"
+    print_status "ok" 
   fi
 done
