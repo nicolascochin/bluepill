@@ -44,13 +44,21 @@ declare -A APPS=(
   ["org.wezfurlong.wezterm"]="Wezterm"
   ["com.valvesoftware.Steam"]="Steam"
   ["io.github.pwr_solaar.solaar"]="Solaar"
-  ["org.freedesktop.Platform.ffmpeg-full//${FFMPEG_BRANCH}"]="Codecs ffmpeg"
-  
+)
+
+declare -A APPS_INTERACTIVE=(
+  ["org.freedesktop.Platform.ffmpeg-full"]="Codecs ffmpeg"
 )
 
 for app in "${!APPS[@]}"; do
   if ! flatpak_installed "$app"; then
     run_logged "📥 Installing ${APPS[$app]}" flatpak_install "$app" || true
+  fi
+done
+
+for app in "${!APPS_INTERACTIVE[@]}"; do
+  if ! flatpak_installed "$app"; then
+    run_logged "📥 Installing ${APPS[$app]}" flatpak install flathub -y "$app" || true
   fi
 done
 
