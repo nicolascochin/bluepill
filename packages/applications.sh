@@ -58,7 +58,7 @@ done
 
 for app in "${!APPS_INTERACTIVE[@]}"; do
   if ! flatpak_installed "$app"; then
-    run_logged "📥 Installing ${APPS[$app]}" flatpak install flathub -y "$app" || true
+    run_logged "📥 Installing ${APPS_INTERACTIVE[$app]}" flatpak install flathub -y "$app" || true
   fi
 done
 
