@@ -5,6 +5,8 @@ PACKAGES=(
     podman-compose
     zsh
     chezmoi
+    fuse      # required for pCloud
+    fuse-libs # required for pCloud
 )
 
 if has_nvidia_gpu; then
