@@ -30,7 +30,6 @@ FFMPEG_BRANCH="$(
 declare -A APPS=(
   ["com.protonvpn.www"]="Proton VPN"
   ["me.proton.Pass"]="Proton Pass"
-  ["me.proton.Mail"]="Proton Mail"
   ["com.spotify.Client"]="Spotify"
   ["org.videolan.VLC"]="VLC"
   ["com.brave.Browser"]="Brave Browser"
