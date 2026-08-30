@@ -43,6 +43,7 @@ declare -A APPS=(
   ["org.wezfurlong.wezterm"]="Wezterm"
   ["com.valvesoftware.Steam"]="Steam"
   ["io.github.pwr_solaar.solaar"]="Solaar"
+  ["io.github.dvlv.boxbuddyrs"]="Box Buddy"
 )
 
 declare -A APPS_INTERACTIVE=(
