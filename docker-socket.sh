@@ -1,14 +1,6 @@
 #!/bin/bash
 
 
-
-run_logged "🛠️ Create /etc/tmpfiles.d/podman-docker-sock.conf" sudo tee /etc/tmpfiles.d/podman-docker-sock.conf <<'EOF'
-L+ /var/run/docker.sock - - - - /run/user/1000/podman/podman.sock
-EOF
-
-
-
-
 TMPFILES_DIR="/etc/tmpfiles.d"
 TMPFILES_CONF="${TMPFILES_DIR}/podman-docker-sock.conf"
 TMPFILES_LINE="L+ /var/run/docker.sock - - - - /run/user/${UID}/podman/podman.sock"
