@@ -44,6 +44,7 @@ declare -A APPS=(
   ["com.valvesoftware.Steam"]="Steam"
   ["io.github.pwr_solaar.solaar"]="Solaar"
   ["io.github.dvlv.boxbuddyrs"]="Box Buddy"
+  ["io.github.gutopardini.wayshot"]="Wayshot"
 )
 
 declare -A APPS_INTERACTIVE=(
