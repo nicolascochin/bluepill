@@ -9,6 +9,7 @@ run_logged "🛠️ Configure VSC" flatpak override \
   --filesystem=/run/user/1000/podman \
   --filesystem=/tmp \
   --env=DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
+  --env=PATH="$HOME/.local/bin:/app/bin:/usr/bin"
 
   # run_logged "🔗 Create a symlink docker" sudo ln -sf /run/user/1000/podman/podman.sock /var/run/docker.sock
 
