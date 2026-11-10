@@ -84,7 +84,7 @@ packages_for_image() {
 
     case "$base" in
         debian|ubuntu*)
-            echo "zsh git curl build-essential"
+            echo "zsh git curl build-essential command-not-found vim"
             ;;
         fedora*)
             echo "zsh git bat fd-find ripgrep python3-pygments rclone PackageKit-command-not-found"
@@ -97,6 +97,24 @@ packages_for_image() {
             ;;
         *)
             echo "zsh git"
+            ;;
+    esac
+}
+
+# Runs once, right after the distrobox has been created.
+# The first `distrobox enter` also runs distrobox-init, which installs
+# the additional packages before the command is executed.
+post_create_for_image() {
+    local base="$1"
+
+    case "$base" in
+        debian|ubuntu*)
+            # command-not-found builds its database from the apt Contents
+            # indexes, which are only downloaded by an apt update run after
+            # the package is installed.
+            echo "Updating apt indexes for command-not-found..."
+            distrobox enter "$NAME" -- sudo apt-get update \
+                || echo "Warning: apt-get update failed, command-not-found will stay empty until the next update." >&2
             ;;
     esac
 }
@@ -135,6 +153,8 @@ case "$COMMAND" in
                 --name "$NAME" \
                 --additional-packages "$PACKAGES" \
                 "${EXTRA_ARGS[@]}"
+
+            post_create_for_image "$BASE_IMAGE"
         fi
 
         exec distrobox enter "$NAME"
