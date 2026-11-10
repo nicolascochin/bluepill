@@ -83,16 +83,13 @@ distrobox_exists() {
 }
 
 # Packages passed to distrobox create, for images the dotfiles do not cover.
-# Debian/Ubuntu and Fedora get theirs from the dotfiles lists
+# Debian/Ubuntu, Fedora and Arch get theirs from the dotfiles lists
 # (~/.config/packages), see install_dotfiles_packages.
 packages_for_image() {
     local base="$1"
 
     case "$base" in
-        debian|ubuntu*|fedora*)
-            ;;
-        archlinux*|arch)
-            echo "zsh git curl base-devel"
+        debian|ubuntu*|fedora*|archlinux*|arch)
             ;;
         alpine*)
             echo "zsh git curl build-base"
