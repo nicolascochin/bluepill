@@ -82,26 +82,9 @@ distrobox_exists() {
         | grep -qx "$NAME"
 }
 
-# Packages passed to distrobox create, for images the dotfiles do not cover.
-# Debian/Ubuntu, Fedora and Arch get theirs from the dotfiles lists
-# (~/.config/packages), see install_dotfiles_packages.
-packages_for_image() {
-    local base="$1"
-
-    case "$base" in
-        debian|ubuntu*|fedora*|archlinux*|arch)
-            ;;
-        alpine*)
-            echo "zsh git curl build-base"
-            ;;
-        *)
-            echo "zsh git"
-            ;;
-    esac
-}
-
 # Runs once, right after the distrobox has been created: installs the
-# packages listed in the dotfiles, shared with the host through $HOME.
+# packages listed in the dotfiles (~/.config/packages), shared with the host
+# through $HOME.
 # The installer detects the distribution and skips the ones it does not know.
 # The first `distrobox enter` also runs distrobox-init, so the container is
 # ready when the installer starts.
@@ -119,8 +102,6 @@ install_dotfiles_packages() {
 }
 
 normalize_image "$IMAGE"
-PACKAGES="$(packages_for_image "$BASE_IMAGE")"
-
 
 case "$COMMAND" in
     destroy)
@@ -147,11 +128,10 @@ case "$COMMAND" in
 
         if ! distrobox_exists; then
             echo "Creating $NAME..."
-            CREATE_ARGS=(--image "$IMAGE" --name "$NAME")
-            if [[ -n "$PACKAGES" ]]; then
-                CREATE_ARGS+=(--additional-packages "$PACKAGES")
-            fi
-            distrobox create "${CREATE_ARGS[@]}" "${EXTRA_ARGS[@]}"
+            distrobox create \
+                --image "$IMAGE" \
+                --name "$NAME" \
+                "${EXTRA_ARGS[@]}"
 
             install_dotfiles_packages
         fi
