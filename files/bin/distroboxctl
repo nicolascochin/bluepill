@@ -76,34 +76,32 @@ normalize_image() {
 }
 
 distrobox_exists() {
-    distrobox list --no-color | awk 'NR>1 {print $1}' | grep -qx "$NAME"
+    # Columns: ID | NAME | STATUS | IMAGE
+    distrobox list --no-color \
+        | awk -F'|' 'NR>1 {gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); print $2}' \
+        | grep -qx "$NAME"
 }
 
-packages_for_image() {
-    local base="$1"
+# Runs once, right after the distrobox has been created: installs the
+# packages listed in the dotfiles (~/.config/packages), shared with the host
+# through $HOME.
+# The installer detects the distribution and skips the ones it does not know.
+# The first `distrobox enter` also runs distrobox-init, so the container is
+# ready when the installer starts.
+install_dotfiles_packages() {
+    local installer="$HOME/.local/bin/install-packages"
 
-    case "$base" in
-        debian|ubuntu*)
-            echo "zsh git curl build-essential"
-            ;;
-        fedora*)
-            echo "zsh git bat fd-find ripgrep python3-pygments rclone PackageKit-command-not-found"
-            ;;
-        archlinux*|arch)
-            echo "zsh git curl base-devel"
-            ;;
-        alpine*)
-            echo "zsh git curl build-base"
-            ;;
-        *)
-            echo "zsh git"
-            ;;
-    esac
+    if [[ ! -x "$installer" ]]; then
+        echo "Warning: $installer not found (dotfiles not applied?), no extra packages installed." >&2
+        return 0
+    fi
+
+    echo "Installing dotfiles packages in $NAME..."
+    distrobox enter "$NAME" -- "$installer" \
+        || echo "Warning: $installer failed in $NAME, run it again from inside the box." >&2
 }
 
 normalize_image "$IMAGE"
-PACKAGES="$(packages_for_image "$BASE_IMAGE")"
-
 
 case "$COMMAND" in
     destroy)
@@ -133,8 +131,9 @@ case "$COMMAND" in
             distrobox create \
                 --image "$IMAGE" \
                 --name "$NAME" \
-                --additional-packages "$PACKAGES" \
                 "${EXTRA_ARGS[@]}"
+
+            install_dotfiles_packages
         fi
 
         exec distrobox enter "$NAME"
