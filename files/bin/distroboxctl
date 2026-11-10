@@ -79,15 +79,14 @@ distrobox_exists() {
     distrobox list --no-color | awk 'NR>1 {print $1}' | grep -qx "$NAME"
 }
 
+# Packages passed to distrobox create, for images the dotfiles do not cover.
+# Debian/Ubuntu and Fedora get theirs from the dotfiles lists
+# (~/.config/packages), see install_dotfiles_packages.
 packages_for_image() {
     local base="$1"
 
     case "$base" in
-        debian|ubuntu*)
-            echo "zsh git curl build-essential command-not-found vim"
-            ;;
-        fedora*)
-            echo "zsh git bat fd-find ripgrep python3-pygments rclone PackageKit-command-not-found"
+        debian|ubuntu*|fedora*)
             ;;
         archlinux*|arch)
             echo "zsh git curl base-devel"
@@ -101,22 +100,22 @@ packages_for_image() {
     esac
 }
 
-# Runs once, right after the distrobox has been created.
-# The first `distrobox enter` also runs distrobox-init, which installs
-# the additional packages before the command is executed.
-post_create_for_image() {
-    local base="$1"
+# Runs once, right after the distrobox has been created: installs the
+# packages listed in the dotfiles, shared with the host through $HOME.
+# The installer detects the distribution and skips the ones it does not know.
+# The first `distrobox enter` also runs distrobox-init, so the container is
+# ready when the installer starts.
+install_dotfiles_packages() {
+    local installer="$HOME/.local/bin/install-packages"
 
-    case "$base" in
-        debian|ubuntu*)
-            # command-not-found builds its database from the apt Contents
-            # indexes, which are only downloaded by an apt update run after
-            # the package is installed.
-            echo "Updating apt indexes for command-not-found..."
-            distrobox enter "$NAME" -- sudo apt-get update \
-                || echo "Warning: apt-get update failed, command-not-found will stay empty until the next update." >&2
-            ;;
-    esac
+    if [[ ! -x "$installer" ]]; then
+        echo "Warning: $installer not found (dotfiles not applied?), no extra packages installed." >&2
+        return 0
+    fi
+
+    echo "Installing dotfiles packages in $NAME..."
+    distrobox enter "$NAME" -- "$installer" \
+        || echo "Warning: $installer failed in $NAME, run it again from inside the box." >&2
 }
 
 normalize_image "$IMAGE"
@@ -148,13 +147,13 @@ case "$COMMAND" in
 
         if ! distrobox_exists; then
             echo "Creating $NAME..."
-            distrobox create \
-                --image "$IMAGE" \
-                --name "$NAME" \
-                --additional-packages "$PACKAGES" \
-                "${EXTRA_ARGS[@]}"
+            CREATE_ARGS=(--image "$IMAGE" --name "$NAME")
+            if [[ -n "$PACKAGES" ]]; then
+                CREATE_ARGS+=(--additional-packages "$PACKAGES")
+            fi
+            distrobox create "${CREATE_ARGS[@]}" "${EXTRA_ARGS[@]}"
 
-            post_create_for_image "$BASE_IMAGE"
+            install_dotfiles_packages
         fi
 
         exec distrobox enter "$NAME"
